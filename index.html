@@ -801,15 +801,10 @@
 </footer>
 
 <script>
-// ===== CONFIGURACIÓN =====
-// IMPORTANTE: Reemplaza esta URL con la de tu Google Apps Script
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxY4O-5fu4Vz9QU3JGJjHUvs6W1Ac2nvDKZA9uwlntUxo5k0eYSlEfn5sLQd8RmW5RL7A/exec';
 const WHATSAPP_NUMBER = '573186676018';
 let asistencia = null;
-// ===== ESTADO =====
-asistencia = '';
 
-// ===== SCROLL PROGRESS =====
 window.addEventListener('scroll', () => {
   const winScroll = document.documentElement.scrollTop;
   const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -817,7 +812,6 @@ window.addEventListener('scroll', () => {
   document.getElementById('progress-bar').style.width = scrolled + '%';
 });
 
-// ===== FADE IN ON SCROLL =====
 const fadeEls = document.querySelectorAll('.fade-in');
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry, i) => {
@@ -829,9 +823,7 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.1 });
 fadeEls.forEach(el => observer.observe(el));
 
-// ===== COUNTDOWN =====
 function updateCountdown() {
-  // Fecha: 27 de Junio 2026 a las 16:00 (4pm)
   const eventDate = new Date('2026-06-27T16:00:00');
   const now = new Date();
   const diff = eventDate - now;
@@ -855,14 +847,12 @@ function updateCountdown() {
 updateCountdown();
 setInterval(updateCountdown, 1000);
 
-// ===== ASISTENCIA =====
 function selectAsistencia(valor) {
   asistencia = valor;
   document.getElementById('btn-si').classList.toggle('selected', valor === 'si');
   document.getElementById('btn-no').classList.toggle('selected', valor === 'no');
 }
 
-// ===== LIGHTBOX =====
 function openLightbox(src) {
   document.getElementById('lightbox-img').src = src;
   document.getElementById('lightbox').classList.add('active');
@@ -876,7 +866,6 @@ document.getElementById('lightbox').addEventListener('click', function(e) {
   if (e.target === this) closeLightbox();
 });
 
-// ===== FORMULARIO =====
 function submitForm() {
   const nombre  = document.getElementById('nombre').value.trim();
   const celular = document.getElementById('celular').value.trim();
@@ -892,12 +881,12 @@ function submitForm() {
   btn.querySelector('span').textContent = 'Enviando...';
 
   const params = new URLSearchParams({
-    nombre:      nombre,
-    celular:     celular,
-    email:       email,
+    nombre:       nombre,
+    celular:      celular,
+    email:        email,
     acompanantes: acomp,
-    asistencia:  asistencia === 'si' ? 'Sí asiste' : 'No asiste',
-    timestamp:   new Date().toLocaleString('es-CO')
+    asistencia:   asistencia === 'si' ? 'Sí asiste' : 'No asiste',
+    timestamp:    new Date().toLocaleString('es-CO')
   });
 
   const img = new Image();
@@ -907,66 +896,6 @@ function submitForm() {
     document.getElementById('form-fields').style.display = 'none';
     document.getElementById('form-success').style.display = 'block';
   }, 1000);
-}
-  // Validación
-  if (!nombre) {
-    alert('Por favor ingresa tu nombre completo.');
-    return;
-  }
-
-  if (!celular) {
-    alert('Por favor ingresa tu número de celular.');
-    return;
-  }
-
-  if (!asistencia) {
-    alert('Por favor indica si asistirás o no.');
-    return;
-  }
-
-  const btn = document.querySelector('.btn-submit');
-  btn.disabled = true;
-  btn.querySelector('span').textContent = 'Enviando...';
-
-  const data = {
-    nombre,
-    celular,
-    email,
-    acompanantes: acomp,
-    asistencia: asistencia === 'si' ? 'Sí asiste' : 'No asiste',
-    fecha_confirmacion: new Date().toLocaleString('es-CO')
-  };
-
-  // Envío a Google Sheets via Apps Script
-  fetch(APPS_SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  })
-    .then(() => {
-      document.getElementById('form-fields').style.display = 'none';
-      document.getElementById('form-success').style.display = 'block';
-
-      // También guardar localmente como backup
-      guardarLocal(data);
-    })
-    .catch(() => {
-      // Incluso si falla el fetch (por CORS), guardamos local
-      guardarLocal(data);
-
-      document.getElementById('form-fields').style.display = 'none';
-      document.getElementById('form-success').style.display = 'block';
-    });
-}
-
-// Backup local en localStorage
-function guardarLocal(data) {
-  let respuestas = JSON.parse(localStorage.getItem('rsvp_jm') || '[]');
-  respuestas.push(data);
-  localStorage.setItem('rsvp_jm', JSON.stringify(respuestas));
 }
 </script>
 </body>
