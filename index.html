@@ -803,7 +803,7 @@
 <script>
 // ===== CONFIGURACIÓN =====
 // IMPORTANTE: Reemplaza esta URL con la de tu Google Apps Script
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxaPLmAH4-6whcg1aSaUAisib8fiFdVLlhz7cZ6ru9IYWdiR2Ax6ccZZ3SszOPHU_7MyA/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxY4O-5fu4Vz9QU3JGJjHUvs6W1Ac2nvDKZA9uwlntUxo5k0eYSlEfn5sLQd8RmW5RL7A/exec';
 const WHATSAPP_NUMBER = '573186676018';
 
 // ===== ESTADO =====
@@ -878,10 +878,36 @@ document.getElementById('lightbox').addEventListener('click', function(e) {
 
 // ===== FORMULARIO =====
 function submitForm() {
-  const nombre = document.getElementById('nombre').value.trim();
+  const nombre  = document.getElementById('nombre').value.trim();
   const celular = document.getElementById('celular').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const acomp = document.getElementById('acompanantes').value;
+  const email   = document.getElementById('email').value.trim();
+  const acomp   = document.getElementById('acompanantes').value;
+
+  if (!nombre)     { alert('Por favor ingresa tu nombre completo.'); return; }
+  if (!celular)    { alert('Por favor ingresa tu número de celular.'); return; }
+  if (!asistencia) { alert('Por favor indica si asistirás o no.'); return; }
+
+  const btn = document.querySelector('.btn-submit');
+  btn.disabled = true;
+  btn.querySelector('span').textContent = 'Enviando...';
+
+  const params = new URLSearchParams({
+    nombre:      nombre,
+    celular:     celular,
+    email:       email,
+    acompanantes: acomp,
+    asistencia:  asistencia === 'si' ? 'Sí asiste' : 'No asiste',
+    timestamp:   new Date().toLocaleString('es-CO')
+  });
+
+  const img = new Image();
+  img.src = APPS_SCRIPT_URL + '?' + params.toString();
+
+  setTimeout(() => {
+    document.getElementById('form-fields').style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+  }, 1000);
+}
 
   // Validación
   if (!nombre) {
