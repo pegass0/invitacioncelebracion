@@ -805,7 +805,7 @@
 // IMPORTANTE: Reemplaza esta URL con la de tu Google Apps Script
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxY4O-5fu4Vz9QU3JGJjHUvs6W1Ac2nvDKZA9uwlntUxo5k0eYSlEfn5sLQd8RmW5RL7A/exec';
 const WHATSAPP_NUMBER = '573186676018';
-
+let asistencia = null;
 // ===== ESTADO =====
 let asistencia = '';
 
@@ -856,10 +856,10 @@ updateCountdown();
 setInterval(updateCountdown, 1000);
 
 // ===== ASISTENCIA =====
-function selectAsistencia(val) {
-  asistencia = val;
-  document.getElementById('btn-si').classList.toggle('selected', val === 'si');
-  document.getElementById('btn-no').classList.toggle('selected', val === 'no');
+function selectAsistencia(valor) {
+  asistencia = valor;
+  document.getElementById('btn-si').classList.toggle('selected', valor === 'si');
+  document.getElementById('btn-no').classList.toggle('selected', valor === 'no');
 }
 
 // ===== LIGHTBOX =====
@@ -908,7 +908,6 @@ function submitForm() {
     document.getElementById('form-success').style.display = 'block';
   }, 1000);
 }
-
   // Validación
   if (!nombre) {
     alert('Por favor ingresa tu nombre completo.');
